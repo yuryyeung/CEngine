@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "utils/Debug.h"
+#include "math/Vector.h"
+#include <vector>
 
 int main()
 {
@@ -26,6 +28,88 @@ int main()
         glfwTerminate();
         return -1;
     }
+
+    std::string vertexShaderSource = R"(
+        #version 330 core
+        layout (location = 0) in vec3 position;
+
+        void main()
+        {
+            gl_Position = vec4(position.x, position.y, position.z, 1.0);
+        }
+    )";
+
+    // Vertex Shader
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    const char* vertexShaderCStr = vertexShaderSource.c_str();
+    glShaderSource(vertexShader, 1, &vertexShaderCStr, nullptr);
+    glCompileShader(vertexShader);
+
+    GLint success;
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        char infoLog[512];
+        glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
+        Debug::LogError("ERROR:VERTEX_SHADER_COMPILATION_FAILED"); 
+        Debug::LogError(infoLog); 
+    }
+    
+    // Fragment Shader
+    std::string fragmentShaderSource = R"(
+        #version 330
+        out vec4 FragColor;
+
+        void main()
+        {
+            FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        }
+    )";
+
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    const char* fragmentShaderSourceCStr = fragmentShaderSource.c_str();
+    glShaderSource(fragmentShader, 1, &fragmentShaderSourceCStr, nullptr);
+    glCompileShader(fragmentShader);
+
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        char infoLog[512];
+        glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
+        Debug::LogError("ERROR:FRAGMENT_SHADER_COMPILATION_FAILED"); 
+        Debug::LogError(infoLog); 
+    }
+
+    // Shader Program
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        char infoLog[512];
+        glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
+        Debug::LogError("ERROR:SHADER_PROGRAM_LINKING_FAILED"); 
+        Debug::LogError(infoLog); 
+    }
+
+    // After linking, the shader is already apply to the Shader Program
+    // Therefore you can delete the vertex and fragment shader for GIGO
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    std::vector<Vector3> vertices = 
+    {
+        Vector3(0.0f, 0.5f, 0.0f),
+        Vector3(-0.5f, -0.5f, 0.0f),
+        Vector3(0.5f, -0.5f, 0.0f)
+    };
+
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
     //Set window position
     glfwSetWindowPos(window, 2000, 150);
