@@ -10,6 +10,7 @@ int main()
     // Check is glfw is initialized
     if (!glfwInit())
     {
+        Debug::LogError("GLFW NOT BEEN INITIALIZED");
         return -1;
     }
 
@@ -19,10 +20,10 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Define GLFWwindow size and create
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "CEngine", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(1280, 720, "CEngine", nullptr, nullptr);
     Debug::Log("Start Create Window");
-    
-    if(window == nullptr)
+
+    if (window == nullptr)
     {
         Debug::LogError("Error creating window");
         glfwTerminate();
@@ -41,7 +42,7 @@ int main()
 
     // Vertex Shader
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    const char* vertexShaderCStr = vertexShaderSource.c_str();
+    const char *vertexShaderCStr = vertexShaderSource.c_str();
     glShaderSource(vertexShader, 1, &vertexShaderCStr, nullptr);
     glCompileShader(vertexShader);
 
@@ -51,10 +52,10 @@ int main()
     {
         char infoLog[512];
         glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-        Debug::LogError("ERROR:VERTEX_SHADER_COMPILATION_FAILED"); 
-        Debug::LogError(infoLog); 
+        Debug::LogError("ERROR:VERTEX_SHADER_COMPILATION_FAILED");
+        Debug::LogError(infoLog);
     }
-    
+
     // Fragment Shader
     std::string fragmentShaderSource = R"(
         #version 330
@@ -67,7 +68,7 @@ int main()
     )";
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* fragmentShaderSourceCStr = fragmentShaderSource.c_str();
+    const char *fragmentShaderSourceCStr = fragmentShaderSource.c_str();
     glShaderSource(fragmentShader, 1, &fragmentShaderSourceCStr, nullptr);
     glCompileShader(fragmentShader);
 
@@ -76,8 +77,8 @@ int main()
     {
         char infoLog[512];
         glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-        Debug::LogError("ERROR:FRAGMENT_SHADER_COMPILATION_FAILED"); 
-        Debug::LogError(infoLog); 
+        Debug::LogError("ERROR:FRAGMENT_SHADER_COMPILATION_FAILED");
+        Debug::LogError(infoLog);
     }
 
     // Shader Program
@@ -90,9 +91,9 @@ int main()
     if (!success)
     {
         char infoLog[512];
-        glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-        Debug::LogError("ERROR:SHADER_PROGRAM_LINKING_FAILED"); 
-        Debug::LogError(infoLog); 
+        glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
+        Debug::LogError("ERROR:SHADER_PROGRAM_LINKING_FAILED");
+        Debug::LogError(infoLog);
     }
 
     // After linking, the shader is already apply to the Shader Program
@@ -100,18 +101,31 @@ int main()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    std::vector<Vector3> vertices = 
-    {
-        Vector3(0.0f, 0.5f, 0.0f),
-        Vector3(-0.5f, -0.5f, 0.0f),
-        Vector3(0.5f, -0.5f, 0.0f)
-    };
+    std::vector<Vector3> vertices =
+        {
+            Vector3(0.0f, 0.5f, 0.0f),
+            Vector3(-0.5f, -0.5f, 0.0f),
+            Vector3(0.5f, -0.5f, 0.0f)};
 
+    // Create Buffer Data
     GLuint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    //Set window position
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    // Set window position
     glfwSetWindowPos(window, 2000, 150);
     glfwMakeContextCurrent(window);
 
@@ -128,11 +142,15 @@ int main()
         glClearColor(1.0f, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glUseProgram(shaderProgram);
+        glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+
         // Swap Buffer from back to front for display
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-    
+
     glfwTerminate();
     return 0;
 }
