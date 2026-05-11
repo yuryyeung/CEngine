@@ -82,10 +82,11 @@ int main()
         out vec4 FragColor;
 
         in vec3 vColor;
+        uniform vec4 uColor;
 
         void main()
         {
-            FragColor = vec4(vColor, 1.0);
+            FragColor = vec4(vColor, 1.0) * uColor;
         }
     )";
 
@@ -124,16 +125,26 @@ int main()
     glDeleteShader(fragmentShader);
 
     std::vector<Vector3> vertices =
-        {
-            Vector3(0.0f, 0.5f, 0.0f),
-            Vector3(-0.5f, -0.5f, 0.0f),
-            Vector3(0.5f, -0.5f, 0.0f)};
+    {
+        Vector3(0.5f, 0.5f, 0.0f),
+        Vector3(-0.5f, 0.5f, 0.0f),
+        Vector3(-0.5f, -0.5f, 0.0f),
+        Vector3(0.5f, -0.5f, 0.0f)
+    };
+
+    std::vector<unsigned int> indices =
+    {
+        0, 1, 2,
+        0, 2, 3
+    };
 
     std::vector<Vector3> colors =
-        {
-            Vector3(1.0f, 0.0f, 0.0f),
-            Vector3(0.0f, 1.0f, 0.0f),
-            Vector3(0.0f, 0.0f, 1.0f)};
+    {
+        Vector3(1.0f, 0.0f, 0.0f),
+        Vector3(0.0f, 1.0f, 0.0f),
+        Vector3(0.0f, 0.0f, 1.0f),
+        Vector3(0.0f, 1.0f, 1.0f)
+    };
 
     // Create Buffer Data
     GLuint vbo_pos;
@@ -149,20 +160,30 @@ int main()
 
     Debug::Log("vertices Size: " + std::to_string(vertices.size()) + " | sizeof(Vector3): " + std::to_string(sizeof(Vector3)));
 
+    GLuint ebo;
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo_pos);
-    glVertexAttribPointer(0, vertices.size(), GL_FLOAT, false, sizeof(Vector3), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vector3), (void *)0);
     glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo_col);
-    glVertexAttribPointer(1, colors.size(), GL_FLOAT, false, sizeof(Vector3), (void *)0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vector3), (void *)0);
     glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    GLint uColorLoc = glGetUniformLocation(shaderProgram, "uColor");
 
     while (!glfwWindowShouldClose(window))
     {
@@ -171,8 +192,11 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
+        glUniform4f(uColorLoc, 0.0f, 1.0f, 0.0f, 1.0f);
+
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+        // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
         // Swap Buffer from back to front for display
         glfwSwapBuffers(window);
