@@ -7,6 +7,9 @@
 
 int main()
 {
+#if defined(__linux__)
+    glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+#endif
     // Check is glfw is initialized
     if (!glfwInit())
     {
@@ -30,12 +33,29 @@ int main()
         return -1;
     }
 
+    // Set window position
+    // glfwSetWindowPos(window, 2000, 150);
+
+    // Show Window
+    glfwMakeContextCurrent(window);
+
+    if (glewInit() != GLEW_OK)
+    {
+        Debug::LogError("GLEW is not ready");
+        glfwTerminate();
+        return -1;
+    }
+
     std::string vertexShaderSource = R"(
         #version 330 core
         layout (location = 0) in vec3 position;
+        layout (location = 1) in vec3 color;
+
+        out vec3 vColor;
 
         void main()
         {
+            vColor = color;
             gl_Position = vec4(position.x, position.y, position.z, 1.0);
         }
     )";
@@ -58,12 +78,14 @@ int main()
 
     // Fragment Shader
     std::string fragmentShaderSource = R"(
-        #version 330
+        #version 330 core
         out vec4 FragColor;
+
+        in vec3 vColor;
 
         void main()
         {
-            FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            FragColor = vec4(vColor, 1.0);
         }
     )";
 
@@ -107,39 +129,45 @@ int main()
             Vector3(-0.5f, -0.5f, 0.0f),
             Vector3(0.5f, -0.5f, 0.0f)};
 
+    std::vector<Vector3> colors =
+        {
+            Vector3(1.0f, 0.0f, 0.0f),
+            Vector3(0.0f, 1.0f, 0.0f),
+            Vector3(0.0f, 0.0f, 1.0f)};
+
     // Create Buffer Data
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+    GLuint vbo_pos;
+    glGenBuffers(1, &vbo_pos);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_pos);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector3), vertices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    GLuint vbo_col;
+    glGenBuffers(1, &vbo_col);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_col);
+    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(Vector3), colors.data(), GL_STATIC_DRAW);
+
+    Debug::Log("vertices Size: " + std::to_string(vertices.size()) + " | sizeof(Vector3): " + std::to_string(sizeof(Vector3)));
 
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), (void *)0);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_pos);
+    glVertexAttribPointer(0, vertices.size(), GL_FLOAT, false, sizeof(Vector3), (void *)0);
     glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_col);
+    glVertexAttribPointer(1, colors.size(), GL_FLOAT, false, sizeof(Vector3), (void *)0);
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    // Set window position
-    glfwSetWindowPos(window, 2000, 150);
-    glfwMakeContextCurrent(window);
-
-    if (glewInit() != GLEW_OK)
-    {
-        Debug::LogError("GLEW is not ready");
-        glfwTerminate();
-        return -1;
-    }
-
     while (!glfwWindowShouldClose(window))
     {
         // Draw Color
-        glClearColor(1.0f, 0, 0, 1);
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
