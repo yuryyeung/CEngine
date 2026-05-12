@@ -5,6 +5,35 @@
 #include "math/Vector.h"
 #include <vector>
 
+Vector2 offset;
+void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods)
+{
+    if (action == GLFW_PRESS)
+    {
+        switch (key)
+        {
+        case GLFW_KEY_UP:
+            Debug::Log("GLFW_KEY_UP");
+            offset.y += 0.01f;
+            break;
+        case GLFW_KEY_DOWN:
+            Debug::Log("GLFW_KEY_DOWN");
+            offset.y -= 0.01f;
+            break;
+        case GLFW_KEY_LEFT:
+            Debug::Log("GLFW_KEY_LEFT");
+            offset.x -= 0.01f;
+            break;
+        case GLFW_KEY_RIGHT:
+            Debug::Log("GLFW_KEY_RIGHT");
+            offset.x += 0.01f;
+            break;
+        default:
+            break;
+        }
+    }
+}
+
 int main()
 {
 #if defined(__linux__)
@@ -33,6 +62,8 @@ int main()
         return -1;
     }
 
+    glfwSetKeyCallback(window, keyCallback);
+
     // Set window position
     // glfwSetWindowPos(window, 2000, 150);
 
@@ -51,12 +82,14 @@ int main()
         layout (location = 0) in vec3 position;
         layout (location = 1) in vec3 color;
 
+        uniform vec2 uOffset;
+
         out vec3 vColor;
 
         void main()
         {
             vColor = color;
-            gl_Position = vec4(position.x, position.y, position.z, 1.0);
+            gl_Position = vec4(position.x + uOffset.x, position.y + uOffset.y, position.z, 1.0);
         }
     )";
 
@@ -184,6 +217,7 @@ int main()
     glBindVertexArray(0);
 
     GLint uColorLoc = glGetUniformLocation(shaderProgram, "uColor");
+    GLint uOffsetLoc = glGetUniformLocation(shaderProgram, "uOffset");
 
     while (!glfwWindowShouldClose(window))
     {
@@ -193,6 +227,7 @@ int main()
 
         glUseProgram(shaderProgram);
         glUniform4f(uColorLoc, 0.0f, 1.0f, 0.0f, 1.0f);
+        glUniform2f(uOffsetLoc, offset.x, offset.y);
 
         glBindVertexArray(vao);
         // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
