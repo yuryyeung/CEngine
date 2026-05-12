@@ -34,3 +34,19 @@ struct Vector3
         return Vector3(0, 0, 0);
     }
 };
+
+struct Vector2Int
+{
+    int x, y;
+
+    Vector2Int() : x(0), y(0) {}
+    Vector2Int(int x, int y) : x(x), y(y) {}
+
+    // Basic Addition
+    Vector2Int operator+(const Vector2Int &other) const { return Vector2Int(x + other.x, y + other.y); }
+
+    bool operator==(const Vector2Int &other) const
+    {
+        return x == other.x && y == other.y;
+    }
+};

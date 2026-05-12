@@ -135,7 +135,7 @@ int main()
     // Initialize GLFW
     if (!glfwInit())
     {
-        std::cout << "Error initialising GLFW" << std::endl;
+        Debug::LogError("Error initialising GLFW");
         return -1;
     }
 
@@ -149,7 +149,7 @@ int main()
     GLFWwindow *window = glfwCreateWindow(800, 800, "SnakeGame", nullptr, nullptr);
     if (!window)
     {
-        std::cout << "Error creating window" << std::endl;
+        Debug::LogError("Error creating window");
         glfwTerminate();
         return -1;
     }
@@ -159,7 +159,7 @@ int main()
     // Initialize GLEW
     if (glewInit() != GLEW_OK)
     {
-        std::cout << "Error initialising GLEW" << std::endl;
+        Debug::LogError("Error initialising GLEW");
         glfwTerminate();
         return -1;
     }
@@ -177,7 +177,7 @@ int main()
     if (!success)
     {
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cerr << "ERROR:VERTEX_SHADER_COMPILATION_FAILED: " << infoLog << std::endl;
+        Debug::LogError("ERROR:VERTEX_SHADER_COMPILATION_FAILED: " + *infoLog);
         glfwTerminate();
         return -1;
     }
@@ -192,7 +192,7 @@ int main()
     if (!success)
     {
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cerr << "ERROR:FRAGMENT_SHADER_COMPILATION_FAILED: " << infoLog << std::endl;
+        Debug::LogError("ERROR:FRAGMENT_SHADER_COMPILATION_FAILED: " + *infoLog);
         glfwTerminate();
         return -1;
     }
@@ -208,7 +208,7 @@ int main()
     if (!success)
     {
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cerr << "ERROR:SHADER_PROGRAM_LINKING_FAILED: " << infoLog << std::endl;
+        Debug::LogError("ERROR:SHADER_PROGRAM_LINKING_FAILED: " + *infoLog);
         glfwTerminate();
         return -1;
     }
