@@ -4,7 +4,7 @@
 int main()
 {
     Game* game = new Game();
-    CEngine::Engine engine;
+    CEngine::Engine& engine = CEngine::Engine::GetInstance();
     engine.SetApplication(game);
 
     if (engine.Init(1280, 720))
