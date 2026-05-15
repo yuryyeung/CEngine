@@ -4,3 +4,5 @@
 #include "Engine.h"
 #include "utils/Debug.h"
 #include "input/InputManager.h"
+#include "graphics/ShaderProgram.h"
+#include "graphics/GraphicsAPI.h"
