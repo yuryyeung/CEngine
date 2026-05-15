@@ -85,7 +85,11 @@ namespace CEngine
         {
             glfwPollEvents();
 
+#if defined(__linux__)
+            auto now = std::chrono::steady_clock::now();
+#elif defined(Win32)
             auto now = std::chrono::high_resolution_clock::now();
+#endif
             float deltaTime = std::chrono::duration<float>(now - m_lastTimePoint).count();
             m_lastTimePoint = now;
 
