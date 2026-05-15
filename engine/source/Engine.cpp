@@ -76,7 +76,11 @@ namespace CEngine
             return;
         }
 
+#if defined(__linux__)
+        m_lastTimePoint == std::chrono::steady_clock::now();
+#elif defined(Win32)
         m_lastTimePoint == std::chrono::high_resolution_clock::now();
+#endif
         while(!glfwWindowShouldClose(m_window) && !m_application -> NeedToBeClosed())
         {
             glfwPollEvents();
