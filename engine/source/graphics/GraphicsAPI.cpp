@@ -1,5 +1,6 @@
 #include "graphics/GraphicsAPI.h"
 #include "graphics/ShaderProgram.h"
+#include "render/Material.h"
 #include "utils/Debug.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -66,6 +67,17 @@ namespace CEngine
 
     void GraphicsAPI::BindShaderProgram(ShaderProgram* shaderProgram)
     {
-        shaderProgram->Bind();
+        if (shaderProgram)
+        {
+            shaderProgram->Bind();
+        }
+    }
+
+    void GraphicsAPI::BindMaterial(Material* material)
+    {
+        if (material)
+        {
+            material->Bind();
+        }
     }
 }
