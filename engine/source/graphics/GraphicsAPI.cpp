@@ -2,9 +2,7 @@
 #include "graphics/ShaderProgram.h"
 #include "render/Material.h"
 #include "utils/Debug.h"
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <string>
+#include "render/Mesh.h"
 #include <iostream>
 
 namespace CEngine
@@ -79,5 +77,51 @@ namespace CEngine
         {
             material->Bind();
         }
+    }
+
+    void GraphicsAPI::BindMesh(Mesh *mesh)
+    {
+        if (mesh)
+        {
+            mesh->Bind();
+        }
+    }
+
+    void GraphicsAPI::DrawMesh(Mesh *mesh)
+    {
+        if (mesh)
+        {
+            mesh->Draw();
+        }
+    }
+
+    GLuint GraphicsAPI::CreateVertexBuffer(const std::vector<float>& vertices)
+    {
+        GLuint vbo = 0;
+        glGenBuffers(1, &vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        return vbo;
+    }
+
+    GLuint GraphicsAPI::CreateIndexBuffer(const std::vector<uint32_t>& indices)
+    {
+        GLuint ebo = 0;
+        glGenBuffers(1, &ebo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), indices.data(), GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        return ebo;
+    }
+
+    void GraphicsAPI::SetClearColor(float r, float g, float b, float a)
+    {
+        glClearColor(r, g, b, a);
+    }
+
+    void GraphicsAPI::ClearBuffers()
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 }

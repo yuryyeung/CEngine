@@ -28,18 +28,39 @@ bool Game::Init()
         out vec4 FragColor;
 
         in vec3 vColor;
-        uniform vec4 uColor;
 
         void main()
         {
-            FragColor = vec4(vColor, 1.0) * uColor;
+            FragColor = vec4(vColor, 1.0);
         }
     )";
 
     auto& graphicsAPI = CEngine::Engine::GetInstance().GetGraphicsAPI();
     auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
-
     m_material.SetShaderProgram(shaderProgram);
+
+    std::vector<float> vertices =
+        {
+            0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
+            0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f};
+
+    std::vector<unsigned int> indices =
+        {
+            0, 1, 2,
+            0, 2, 3};
+
+    CEngine::VertexLayout vertexLayout;
+
+    // Position
+    vertexLayout.elements.push_back({0, 3, GL_FLOAT, 0});
+
+    // Color
+    vertexLayout.elements.push_back({1, 3, GL_FLOAT, sizeof(float) * 3});
+    vertexLayout.stride = sizeof(float) * 6;
+
+    m_mesh = std::make_unique<CEngine::Mesh>(vertexLayout, vertices, indices);
 
     return true;
 }
@@ -52,6 +73,13 @@ void Game::Update(float deltaTime)
     {
         Debug::Log("[A] Button is pressed");
     }
+
+    CEngine::RenderCommand command;
+    command.material = &m_material;
+    command.mesh = m_mesh.get();
+
+    auto &renderQueue = CEngine::Engine::GetInstance().GetRenderQueue();
+    renderQueue.Submit(command);
 }
 
 void Game::Destroy()

@@ -8,7 +8,7 @@ namespace CEngine
         m_shaderProgram = shaderProgram;
     }
 
-    void Material::SetParam(const std::string name, float value)
+    void Material::SetParam(const std::string& name, float value)
     {
         m_floatParams[name] = value;
     }

@@ -1,5 +1,6 @@
 #pragma once
 #include <CEngine.h>
+#include <memory>
 
 class Game : public CEngine::Application
 {
@@ -10,4 +11,5 @@ class Game : public CEngine::Application
 
     private:
         CEngine::Material m_material;
+        std::unique_ptr<CEngine::Mesh> m_mesh;
 };

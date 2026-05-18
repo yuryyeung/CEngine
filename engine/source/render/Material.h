@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <string>
 #include <unordered_map>
 
 namespace CEngine
@@ -9,7 +10,7 @@ namespace CEngine
     {
         public:
             void SetShaderProgram(const std::shared_ptr<ShaderProgram>& shaderProgram);
-            void SetParam(const std::string name, float value);
+            void SetParam(const std::string& name, float value);
             void Bind();
             
         private:

@@ -3,6 +3,7 @@
 #include "utils/Debug.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <chrono>
 
 namespace CEngine
 {
@@ -78,7 +79,7 @@ namespace CEngine
 
 #if defined(__linux__)
         m_lastTimePoint == std::chrono::steady_clock::now();
-#elif defined(Win32)
+#elif defined(_WIN32)
         m_lastTimePoint == std::chrono::high_resolution_clock::now();
 #endif
         while(!glfwWindowShouldClose(m_window) && !m_application -> NeedToBeClosed())
@@ -87,13 +88,18 @@ namespace CEngine
 
 #if defined(__linux__)
             auto now = std::chrono::steady_clock::now();
-#elif defined(Win32)
+#elif defined(_WIN32)
             auto now = std::chrono::high_resolution_clock::now();
 #endif
             float deltaTime = std::chrono::duration<float>(now - m_lastTimePoint).count();
             m_lastTimePoint = now;
 
             m_application->Update(deltaTime);
+
+            m_graphicsAPI.SetClearColor(1, 1, 1, 1);
+            m_graphicsAPI.ClearBuffers();
+
+            m_renderQueue.Draw(m_graphicsAPI);
 
             glfwSwapBuffers(m_window);
         }
@@ -128,5 +134,10 @@ namespace CEngine
     GraphicsAPI &Engine::GetGraphicsAPI()
     {
         return m_graphicsAPI;
+    }
+
+    RenderQueue &Engine::GetRenderQueue()
+    {
+        return m_renderQueue;
     }
 }
