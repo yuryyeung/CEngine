@@ -19,3 +19,7 @@
 #include "render/Material.h"
 #include "render/Mesh.h"
 #include "render/RenderQueue.h"
+
+// Scene And GameObject
+#include "scene/GameObject.h"
+#include "scene/Scene.h"

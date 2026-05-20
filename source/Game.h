@@ -10,6 +10,5 @@ class Game : public CEngine::Application
         void Destroy() override;
 
     private:
-        CEngine::Material m_material;
-        std::unique_ptr<CEngine::Mesh> m_mesh;
+        CEngine::Scene m_scene;
 };
