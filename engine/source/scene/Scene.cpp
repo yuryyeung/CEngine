@@ -38,7 +38,6 @@ namespace CEngine
         auto currentParent = obj->GetParent();
 
         if (parent == nullptr)
-        // We are trying to add it as a child of another object
         {
             if (currentParent != nullptr)
             {
@@ -48,8 +47,8 @@ namespace CEngine
                     [obj](const std::unique_ptr<GameObject> &el)
                     {
                         return el.get() == obj;
-                    }
-                );
+                    });
+
                 if (it != currentParent->m_children.end())
                 {
                     m_objects.push_back(std::move(*it));
@@ -64,12 +63,13 @@ namespace CEngine
             else
             {
                 auto it = std::find_if(
-                    currentParent->m_children.begin(),
-                    currentParent->m_children.end(),
+                    m_objects.begin(),
+                    m_objects.end(),
                     [obj](const std::unique_ptr<GameObject> &el)
                     {
                         return el.get() == obj;
                     });
+
                 if (it == m_objects.end())
                 {
                     std::unique_ptr<GameObject> objHolder(obj);
@@ -78,8 +78,8 @@ namespace CEngine
                 }
             }
         }
+        // We are trying to add it as a child of another object
         else
-        // We are trying to add it as a child of another boject
         {
             if (currentParent != nullptr)
             {
@@ -90,6 +90,7 @@ namespace CEngine
                     {
                         return el.get() == obj;
                     });
+
                 if (it != currentParent->m_children.end())
                 {
                     bool found = false;
@@ -125,6 +126,8 @@ namespace CEngine
                     {
                         return el.get() == obj;
                     });
+
+                // The object has been hust created
                 if (it == m_objects.end())
                 {
                     std::unique_ptr<GameObject> objHolder(obj);
@@ -156,6 +159,7 @@ namespace CEngine
                 }
             }
         }
+
         return result;
     }
 }
