@@ -3,6 +3,7 @@
 #include "render/Material.h"
 #include "graphics/GraphicsAPI.h"
 #include <vector>
+#include <glm/mat4x4.hpp>
 
 namespace CEngine
 {
@@ -10,6 +11,7 @@ namespace CEngine
     {
         Mesh *mesh = nullptr;
         Material *material = nullptr;
+        glm::mat4 modelMatrix;
     };
 
     class RenderQueue

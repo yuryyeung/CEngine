@@ -36,4 +36,9 @@ namespace CEngine
             m_shaderProgram->SetUniform(param.first, param.second.first, param.second.second);
         }
     }
+
+    ShaderProgram *Material::GetShaderProgram()
+    {
+        return m_shaderProgram.get();
+    }
 }

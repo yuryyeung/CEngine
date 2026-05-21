@@ -13,7 +13,9 @@ namespace CEngine
             void SetParam(const std::string& name, float value);
             void SetParam(const std::string& name, float v0, float v1);
             void Bind();
-            
+
+            ShaderProgram *GetShaderProgram();
+
         private:
             std::shared_ptr<ShaderProgram> m_shaderProgram;
             std::unordered_map<std::string, float> m_floatParams;
