@@ -23,3 +23,7 @@
 // Scene And GameObject
 #include "scene/GameObject.h"
 #include "scene/Scene.h"
+#include "scene/Component.h"
+
+// Components
+#include "scene/components/MeshComponent.h"

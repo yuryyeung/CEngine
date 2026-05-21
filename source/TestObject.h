@@ -9,6 +9,4 @@ class TestObject : public CEngine::GameObject
         void Update(float deltaTime) override;
 
     private:
-        CEngine::Material m_material;
-        std::shared_ptr<CEngine::Mesh> m_mesh;
 };

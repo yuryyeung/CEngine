@@ -35,7 +35,9 @@ TestObject::TestObject()
 
     auto &graphicsAPI = CEngine::Engine::GetInstance().GetGraphicsAPI();
     auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
-    m_material.SetShaderProgram(shaderProgram);
+
+    auto material = std::make_shared<CEngine::Material>();
+    material->SetShaderProgram(shaderProgram);
 
     std::vector<float> vertices =
         {
@@ -58,7 +60,8 @@ TestObject::TestObject()
     vertexLayout.elements.push_back({1, 3, GL_FLOAT, sizeof(float) * 3});
     vertexLayout.stride = sizeof(float) * 6;
 
-    m_mesh = std::make_shared<CEngine::Mesh>(vertexLayout, vertices, indices);
+    auto mesh = std::make_shared<CEngine::Mesh>(vertexLayout, vertices, indices);
+    AddComponent(new CEngine::MeshComponent(material, mesh));
 }
 
 void TestObject::Update(float deltaTime)
@@ -88,12 +91,4 @@ void TestObject::Update(float deltaTime)
         position.y -= 1 * deltaTime;
     }
     SetPosition(position);
-
-    CEngine::RenderCommand command;
-    command.material = &m_material;
-    command.mesh = m_mesh.get();
-    command.modelMatrix = GetWorldTransform();
-
-    auto &renderQueue = CEngine::Engine::GetInstance().GetRenderQueue();
-    renderQueue.Submit(command);
 }
