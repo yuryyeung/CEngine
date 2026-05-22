@@ -9,6 +9,7 @@ namespace CEngine
 
     class MeshComponent : public Component
     {
+        COMPONENT(MeshComponent)
         public:
             MeshComponent(const std::shared_ptr<Material> material, const std::shared_ptr<Mesh> mesh);
             void Update(float deltaTime) override;

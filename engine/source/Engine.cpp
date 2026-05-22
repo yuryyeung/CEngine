@@ -1,9 +1,12 @@
 #include "Engine.h"
 #include "Application.h"
 #include "utils/Debug.h"
+#include <chrono>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <chrono>
+#include "scene/GameObject.h"
+#include "scene/Component.h"
+#include "scene/components/CameraComponent.h"
 
 namespace CEngine
 {
@@ -99,7 +102,27 @@ namespace CEngine
             m_graphicsAPI.SetClearColor(1, 1, 1, 1);
             m_graphicsAPI.ClearBuffers();
 
-            m_renderQueue.Draw(m_graphicsAPI);
+            CameraData cameraData;
+            int width = 0;
+            int height = 0;
+            glfwGetWindowSize(m_window, &width, &height);
+            float aspect = static_cast<float>(width) / static_cast<float>(height);
+
+            if (m_currentScene)
+            {
+                if (auto cameraObject = m_currentScene->GetMainCamera())
+                {
+                    // logic for matrices
+                    auto cameraComponent = cameraObject->GetComponent<CameraComponent>();
+                    if (cameraComponent)
+                    {
+                        cameraData.viewMatrix = cameraComponent->GetViewMatrix();
+                        cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix(aspect);
+                    }
+                }
+            }
+
+            m_renderQueue.Draw(m_graphicsAPI, cameraData);
 
             glfwSwapBuffers(m_window);
         }
@@ -139,5 +162,15 @@ namespace CEngine
     RenderQueue &Engine::GetRenderQueue()
     {
         return m_renderQueue;
+    }
+
+    void Engine::SetScene(Scene *scene)
+    {
+        m_currentScene.reset(scene);
+    }
+
+    Scene *Engine::GetScene()
+    {
+        return m_currentScene.get();
     }
 }

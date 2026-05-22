@@ -20,6 +20,19 @@ namespace CEngine
             void MarkForDestory();
 
             void AddComponent(Component* component);
+            template<typename T, typename = typename std::enable_if_t<std::is_base_of_v<Component, T>>>
+            T* GetComponent()
+            {
+                size_t typeId = Component::StaticTypeId<T>();
+                for (auto& component : m_components)
+                {
+                    if (component->GetTypeId() == typeId)
+                    {
+                        return static_cast<T *>(component.get());
+                    }
+                }
+                return nullptr;
+            }
 
             const glm::vec3 GetPosition() const;
             void SetPosition(const glm::vec3 &pos);

@@ -10,5 +10,5 @@ class Game : public CEngine::Application
         void Destroy() override;
 
     private:
-        CEngine::Scene m_scene;
+        CEngine::Scene* m_scene = nullptr;
 };

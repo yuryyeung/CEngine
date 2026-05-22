@@ -10,6 +10,7 @@ namespace CEngine
     {   
         private:
             std::vector<std::unique_ptr<GameObject>> m_objects;
+            GameObject *m_mainCamera = nullptr;
 
         public:
             void Update(float deltaTime);
@@ -27,5 +28,8 @@ namespace CEngine
             }
 
             bool SetParent(GameObject* gameObject, GameObject* parent);
+
+            void SetMainCamera(GameObject* mainCamera);
+            GameObject *GetMainCamera();
     };
 }

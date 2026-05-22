@@ -14,11 +14,17 @@ namespace CEngine
         glm::mat4 modelMatrix;
     };
 
+    struct CameraData
+    {
+        glm::mat4 viewMatrix;
+        glm::mat4 projectionMatrix;
+    };
+
     class RenderQueue
     {
         public:
             void Submit(const RenderCommand& command);   // Enqueue Draw Command
-            void Draw(GraphicsAPI& graphicesAPI);
+            void Draw(GraphicsAPI& graphicesAPI, const CameraData& cameraData);
 
         private:
             std::vector<RenderCommand> m_commands;
