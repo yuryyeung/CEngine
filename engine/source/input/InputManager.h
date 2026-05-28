@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <glm/vec2.hpp>
 
 namespace CEngine
 {
@@ -16,9 +17,21 @@ namespace CEngine
             void SetKeyPressed(int key, bool pressed);
             bool IsKeyPressed(int key);
 
+            void SetMouseButtonPressed(int button, bool pressed);
+            bool IsMouseButtonPressed(int button);
+
+            void SetMousePositionOld(const glm::vec2 &position);
+            const glm::vec2 &GetMousePositionOld() const;
+            
+            void SetMousePositionCurrent(const glm::vec2 &position);
+            const glm::vec2 &GetMousePositionCurrent() const;
+
         private:
             std::array<bool, 256> m_keys = { false };
-            friend class Engine;
+            std::array<bool, 16> m_mouseKeys = { false };
+            glm::vec2 m_mousePositionOld = glm::vec2(0.0f);
+            glm::vec2 m_mousePositionCurrent = glm::vec2(0.0f);
 
+            friend class Engine;
     };
 }

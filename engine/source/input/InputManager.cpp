@@ -20,4 +20,43 @@ namespace CEngine
 
         return m_keys[key];
     }
+
+    void InputManager::SetMouseButtonPressed(int button, bool pressed)
+    {
+        if (button < 0 || button >= static_cast<int>(m_mouseKeys.size()))
+        {
+            return;
+        }
+        m_mouseKeys[button] = pressed;
+    }
+
+    bool InputManager::IsMouseButtonPressed(int button)
+    {
+        if (button < 0 || button >= static_cast<int>(m_mouseKeys.size()))
+        {
+            return false;
+        }
+
+        return m_mouseKeys[button];
+    }
+
+    void InputManager::SetMousePositionOld(const glm::vec2 &position)
+    {
+        m_mousePositionOld = position;
+    }
+
+    const glm::vec2 &InputManager::GetMousePositionOld() const
+    {
+        return m_mousePositionOld;
+    }
+
+    void InputManager::SetMousePositionCurrent(const glm::vec2 &position)
+    {
+        m_mousePositionCurrent = position;
+    }
+
+    const glm::vec2 &InputManager::GetMousePositionCurrent() const
+    {
+        return m_mousePositionCurrent;
+    }
 }

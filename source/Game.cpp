@@ -10,6 +10,7 @@ bool Game::Init()
     auto camera = m_scene->CreateObject("Camera");
     camera->AddComponent(new CEngine::CameraComponent());
     camera->SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
+    camera->AddComponent(new CEngine::PlayerControllerComponent());
 
     m_scene->SetMainCamera(camera);
 
