@@ -1,4 +1,5 @@
 #include "scene/Component.h"
+#include <cstddef>
 
 namespace CEngine
 {

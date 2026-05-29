@@ -1,5 +1,6 @@
 #include "scene/Scene.h"
 #include "scene/GameObject.h"
+#include <algorithm>
 
 namespace CEngine
 {
