@@ -93,6 +93,7 @@ namespace CEngine
             return false;
         }
 
+        m_graphicsAPI.Init();
         return m_application->Init();
     }
 
@@ -148,7 +149,7 @@ namespace CEngine
             m_renderQueue.Draw(m_graphicsAPI, cameraData);
 
             glfwSwapBuffers(m_window);
-            
+
             m_inputManager.SetMousePositionOld(m_inputManager.GetMousePositionCurrent());
         }
     }
