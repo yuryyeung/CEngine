@@ -190,6 +190,11 @@ namespace CEngine
         return m_renderQueue;
     }
 
+    FileSystem &Engine::GetFileSystem()
+    {
+        return m_fileSystem;
+    }
+
     void Engine::SetScene(Scene *scene)
     {
         m_currentScene.reset(scene);

@@ -1,5 +1,6 @@
 #include "render/Material.h"
 #include "graphics/ShaderProgram.h"
+#include "graphics/Texture.h"
 
 namespace CEngine
 {
@@ -18,6 +19,11 @@ namespace CEngine
         m_float2Params[name] = {v0, v1};
     }
 
+    void Material::SetParam(const std::string &name, const std::shared_ptr<Texture> texture)
+    {
+        m_textures[name] = texture;
+    }
+
     void Material::Bind()
     {
         if (!m_shaderProgram)
@@ -34,6 +40,11 @@ namespace CEngine
         for (auto& param : m_float2Params)
         {
             m_shaderProgram->SetUniform(param.first, param.second.first, param.second.second);
+        }
+
+        for (auto& parm : m_textures)
+        {
+            m_shaderProgram->SetTexture(parm.first, parm.second.get());
         }
     }
 

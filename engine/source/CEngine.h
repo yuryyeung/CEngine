@@ -14,6 +14,7 @@
 #include "graphics/ShaderProgram.h"
 #include "graphics/GraphicsAPI.h"
 #include "graphics/VertexLayout.h"
+#include "graphics/Texture.h"
 
 // Rendering
 #include "render/Material.h"
@@ -29,3 +30,6 @@
 #include "scene/components/MeshComponent.h"
 #include "scene/components/CameraComponent.h"
 #include "scene/components/PlayerControllerComponent.h"
+
+// IO
+#include "io/FileSystem.h"

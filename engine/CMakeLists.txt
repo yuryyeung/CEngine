@@ -4,6 +4,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(CEngine)
 
+set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
+
+configure_file(
+	${PROJECT_SOURCE_DIR}/config.h.in
+	${PROJECT_BINARY_DIR}/config.h
+)
+
 set(PROJECT_SOURCE_FILES
 	source/Engine.h
 	source/Engine.cpp
@@ -16,6 +23,8 @@ set(PROJECT_SOURCE_FILES
 	source/graphics/ShaderProgram.cpp
 	source/graphics/GraphicsAPI.h
 	source/graphics/GraphicsAPI.cpp
+	source/graphics/Texture.h
+	source/graphics/Texture.cpp
 	source/render/Material.h
 	source/render/Material.cpp
 	source/render/Mesh.h
@@ -34,6 +43,8 @@ set(PROJECT_SOURCE_FILES
 	source/scene/components/CameraComponent.cpp
 	source/scene/components/PlayerControllerComponent.h
 	source/scene/components/PlayerControllerComponent.cpp
+	source/io/FileSystem.h
+	source/io/FileSystem.cpp
 )
 
 include_directories(source)
@@ -50,13 +61,25 @@ include_directories(thirdparty/glew/include)
 set_property(TARGET glew_s PROPERTY FOLDER GLEW)
 set_property(TARGET glew PROPERTY FOLDER GLEW)
 
+# Include Assets Directories
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
+
 # Add GLM library
 add_subdirectory(thirdparty/glm-1.0.1/glm)
 include_directories(thirdparty/glm-1.0.1)
+
+# Add stb_image for image loading
+include_directories(thirdparty/stb_image)
 
 # Link all thirdparty libraries
 target_link_libraries(${PROJECT_NAME} 
     glfw 
     glew_s
 	glm
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+	${ASSETS_DIR}
+	${CMAKE_BINARY_DIR}/assets
 )
