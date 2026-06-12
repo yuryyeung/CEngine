@@ -3,18 +3,7 @@
 
 TestObject::TestObject()
 {
-    auto texture = CEngine::Texture::Load("brick.png");
-    auto& fs = CEngine::Engine::GetInstance().GetFileSystem();
-
-    std::string vertexShaderSource = fs.LoadAssetFileText("shaders/vertex.glsl");
-    std::string fragmentShaderSource = fs.LoadAssetFileText("shaders/fragment.glsl");
-
-    auto &graphicsAPI = CEngine::Engine::GetInstance().GetGraphicsAPI();
-    auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource);    
-
-    auto material = std::make_shared<CEngine::Material>();
-    material->SetShaderProgram(shaderProgram);
-    material->SetParam("brickTexture", texture);
+    auto material = CEngine::Material::Load("materials/brick.mat");
 
     std::vector<float> vertices =
         {

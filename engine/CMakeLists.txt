@@ -71,6 +71,9 @@ include_directories(thirdparty/glm-1.0.1)
 # Add stb_image for image loading
 include_directories(thirdparty/stb_image)
 
+# Add Json library
+include_directories(thirdparty/json)
+
 # Link all thirdparty libraries
 target_link_libraries(${PROJECT_NAME} 
     glfw 

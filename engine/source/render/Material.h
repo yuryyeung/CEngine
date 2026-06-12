@@ -11,12 +11,13 @@ namespace CEngine
     {
         public:
             void SetShaderProgram(const std::shared_ptr<ShaderProgram>& shaderProgram);
+            ShaderProgram *GetShaderProgram();
             void SetParam(const std::string& name, float value);
             void SetParam(const std::string& name, float v0, float v1);
             void SetParam(const std::string &name, const std::shared_ptr<Texture> texture);
             void Bind();
 
-            ShaderProgram *GetShaderProgram();
+            static std::shared_ptr<Material> Load(const std::string& path);
 
         private:
             std::shared_ptr<ShaderProgram> m_shaderProgram;
