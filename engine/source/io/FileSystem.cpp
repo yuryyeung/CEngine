@@ -1,5 +1,6 @@
 #include "io/FileSystem.h"
 #include "config.h"
+#include <fstream>
 
 #if defined _WIN32
 #include <windows.h>
@@ -41,5 +42,36 @@ namespace CEngine
 #else
         return std::filesystem::weakly_canonical(GetExecutableFolder() / "assets");
 #endif
+    }
+
+    std::vector<char> FileSystem::LoadFile(const std::filesystem::path& path)
+    {
+        std::ifstream file(path, std::ios::binary | std::ios::ate);
+        if (!file.is_open())
+        {
+            return {}; 
+        }
+
+        auto size = file.tellg();
+        file.seekg(0);
+
+        std::vector<char> buffer(size);
+
+        if (!file.read(buffer.data(), size))
+        {
+            return {};
+        }
+        return buffer;
+    }
+
+    std::vector<char> FileSystem::LoadAssetFile(const std::string& relativePath)
+    {
+        return LoadFile(GetAssetsFolder() / relativePath);
+    }
+
+    std::string FileSystem::LoadAssetFileText(const std::string& relativePath)
+    {
+        auto buffer = LoadAssetFile(relativePath);
+        return std::string(buffer.begin(), buffer.end());
     }
 }

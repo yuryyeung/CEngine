@@ -1,5 +1,7 @@
 #pragma once
 #include <GL/glew.h> 
+#include <string>
+#include <memory>
 
 namespace CEngine
 {
@@ -9,7 +11,9 @@ namespace CEngine
             Texture(int width, int height, int numChannels, unsigned char *data);
             ~Texture();
             GLuint GetId() const;
+            void Init(int width, int height, int numChannels, unsigned char *data);
 
+            static std::shared_ptr<Texture> Load(const std::string path);
         private:
             int m_width = 0;
             int m_height = 0;

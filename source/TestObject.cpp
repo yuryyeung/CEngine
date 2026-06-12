@@ -1,63 +1,13 @@
 #include "TestObject.h"
 #include <GLFW/glfw3.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-
 TestObject::TestObject()
 {
-    auto &fs = CEngine::Engine::GetInstance().GetFileSystem();
-    auto path = fs.GetAssetsFolder() / "brick.png";
+    auto texture = CEngine::Texture::Load("brick.png");
+    auto& fs = CEngine::Engine::GetInstance().GetFileSystem();
 
-    int width, height, channels;
-    unsigned char *data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
-
-    std::shared_ptr<CEngine::Texture> texture;
-    if (data)
-    {
-        texture = std::make_shared<CEngine::Texture>(width, height, channels, data);
-        Debug::Log("Image Loaded");
-        stbi_image_free(data);
-    }
-
-    // Vertex Shader
-    std::string vertexShaderSource = R"(
-        #version 330 core
-        layout (location = 0) in vec3 position;
-        layout (location = 1) in vec3 color;
-        layout (location = 2) in vec2 uv;
-
-        uniform mat4 uModel;
-        uniform mat4 uView;
-        uniform mat4 uProjection;
-
-        out vec3 vColor;
-        out vec2 vUV;
-
-        void main()
-        {
-            vColor = color;
-            vUV = uv;
-            gl_Position = uProjection * uView * uModel * vec4(position, 1.0);
-        }
-    )";
-
-    // Fragment Shader
-    std::string fragmentShaderSource = R"(
-        #version 330 core
-        out vec4 FragColor;
-
-        in vec3 vColor;
-        in vec2 vUV;
-
-        uniform sampler2D brickTexture;
-
-        void main()
-        {
-            vec4 texColor = texture(brickTexture, vUV);
-            FragColor = texColor * vec4(vColor, 1.0);
-        }
-    )";
+    std::string vertexShaderSource = fs.LoadAssetFileText("shaders/vertex.glsl");
+    std::string fragmentShaderSource = fs.LoadAssetFileText("shaders/fragment.glsl");
 
     auto &graphicsAPI = CEngine::Engine::GetInstance().GetGraphicsAPI();
     auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource);    
