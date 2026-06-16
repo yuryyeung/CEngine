@@ -32,6 +32,13 @@ bool Game::Init()
         gameobject->SetPosition(glm::vec3(x, y, z));
     }
 
+    auto suzanneMesh = CEngine::Mesh::Load("models/Suzanne.gltf");
+    auto suzanneMaterial = CEngine::Material::Load("materials/suzanne.mat");
+
+    auto suzzanneObj = m_scene->CreateObject("Suzanne");
+    suzzanneObj->AddComponent(new CEngine::MeshComponent(suzanneMaterial, suzanneMesh));
+    suzzanneObj->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
+
     CEngine::Engine::GetInstance()
         .SetScene(m_scene);
     return true;

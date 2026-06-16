@@ -1,5 +1,7 @@
 #pragma once
 #include <GL/glew.h>
+#include <memory>
+#include <string>
 #include "graphics/VertexLayout.h"
 
 namespace CEngine
@@ -15,6 +17,8 @@ namespace CEngine
 
             void Bind();
             void Draw();
+
+            static std::shared_ptr<Mesh> Load(const std::string &path);
 
         private:
             VertexLayout m_vertexLayout;

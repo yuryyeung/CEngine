@@ -74,6 +74,9 @@ include_directories(thirdparty/stb_image)
 # Add Json library
 include_directories(thirdparty/json)
 
+# Add cgltf for GLTF model loading
+include_directories(thirdparty/cgltf)
+
 # Link all thirdparty libraries
 target_link_libraries(${PROJECT_NAME} 
     glfw 

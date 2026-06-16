@@ -39,9 +39,8 @@ namespace CEngine
         {
             return path;
         }
-#else
-        return std::filesystem::weakly_canonical(GetExecutableFolder() / "assets");
 #endif
+        return std::filesystem::weakly_canonical(GetExecutableFolder() / "assets");
     }
 
     std::vector<char> FileSystem::LoadFile(const std::filesystem::path& path)
