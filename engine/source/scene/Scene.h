@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include "GameObject.h"
+#include "Common.h"
 
 namespace CEngine
 {
@@ -11,6 +12,7 @@ namespace CEngine
         private:
             std::vector<std::unique_ptr<GameObject>> m_objects;
             GameObject *m_mainCamera = nullptr;
+            void CollectLightRecursive(GameObject* obj, std::vector<LightData>& out);
 
         public:
             void Update(float deltaTime);
@@ -31,5 +33,7 @@ namespace CEngine
 
             void SetMainCamera(GameObject* mainCamera);
             GameObject *GetMainCamera();
+
+            std::vector<LightData> CollectLights();
     };
 }

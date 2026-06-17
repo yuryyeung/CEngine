@@ -2,7 +2,6 @@
 #include "graphics/VertexLayout.h"
 #include "graphics/GraphicsAPI.h"
 #include "Engine.h"
-#include "utils/Debug.h"
 
 #define CGLTF_IMPLEMENTATION
 #include <cgltf.h>
@@ -24,7 +23,6 @@ namespace CEngine
 
         for (auto& element : m_vertexLayout.elements)
         {
-            Debug::Log(element.index);
             glVertexAttribPointer(element.index, element.size, element.type, GL_FALSE, m_vertexLayout.stride, (void *)(uintptr_t)element.offset);
             glEnableVertexAttribArray(element.index);
         }

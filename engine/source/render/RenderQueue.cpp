@@ -11,7 +11,7 @@ namespace CEngine
         m_commands.push_back(command);
     }
 
-    void RenderQueue::Draw(GraphicsAPI &graphicesAPI, const CameraData &cameraData)
+    void RenderQueue::Draw(GraphicsAPI &graphicesAPI, const CameraData &cameraData, const std::vector<LightData>& lights)
     {
         for (auto& command : m_commands)
         {
@@ -20,6 +20,12 @@ namespace CEngine
             shaderProgram->SetUniform("uModel", command.modelMatrix);
             shaderProgram->SetUniform("uView", cameraData.viewMatrix);
             shaderProgram->SetUniform("uProjection", cameraData.projectionMatrix);
+            if (!lights.empty())
+            {
+                auto& light = lights[0];
+                shaderProgram->SetUniform("uLightColor", light.color);
+                shaderProgram->SetUniform("uLightPosition", light.position);
+            }
 
             graphicesAPI.BindMesh(command.mesh);
             graphicesAPI.DrawMesh(command.mesh);

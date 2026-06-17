@@ -1,5 +1,6 @@
 #include "scene/Scene.h"
 #include "scene/GameObject.h"
+#include "scene/components/LightComponent.h"
 #include <algorithm>
 
 namespace CEngine
@@ -172,5 +173,31 @@ namespace CEngine
     GameObject *Scene::GetMainCamera()
     {
         return m_mainCamera;
+    }
+
+    std::vector<LightData> Scene::CollectLights()
+    {
+        std::vector<LightData> lights;
+        for (auto& obj : m_objects)
+        {
+            CollectLightRecursive(obj.get(), lights);
+        }
+        return lights;
+    }
+
+    void Scene::CollectLightRecursive(GameObject* obj, std::vector<LightData>& out)
+    {
+        if (auto light = obj->GetComponent<LightComponent>())
+        {
+            LightData data;
+            data.color = light->GetColor();
+            data.position = obj->GetPosition();     
+            out.push_back(data);   
+        }
+
+        for (auto& child : obj->m_children)
+        {
+            CollectLightRecursive(child.get(), out);
+        }
     }
 }

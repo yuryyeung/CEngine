@@ -60,6 +60,12 @@ namespace CEngine
         return m_position;
     }
 
+    glm::vec3& GameObject::GetWorldPosition() const
+    {
+        glm::vec4 hom = GetWorldTransform() * glm::vec4(glm::vec3(0.0f), 1.0f);
+        return glm::vec3(hom) / hom.w;
+    }
+
     void GameObject::SetPosition(const glm::vec3 &pos)
     {
         m_position = pos;
