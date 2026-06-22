@@ -23,8 +23,8 @@ namespace CEngine
             if (!lights.empty())
             {
                 auto& light = lights[0];
-                shaderProgram->SetUniform("uLightColor", light.color);
-                shaderProgram->SetUniform("uLightPosition", light.position);
+                shaderProgram->SetUniform("uLight.color", light.color);
+                shaderProgram->SetUniform("uLight.position", light.position);
             }
 
             graphicesAPI.BindMesh(command.mesh);

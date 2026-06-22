@@ -19,6 +19,7 @@ namespace CEngine
             void Draw();
 
             static std::shared_ptr<Mesh> Load(const std::string &path);
+            static std::shared_ptr<Mesh> CreateCube();
 
         private:
             VertexLayout m_vertexLayout;

@@ -39,6 +39,12 @@ bool Game::Init()
     suzzanneObj->AddComponent(new CEngine::MeshComponent(suzanneMaterial, suzanneMesh));
     suzzanneObj->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
 
+    auto light = m_scene->CreateObject("Light");
+    auto lightComp = new CEngine::LightComponent();
+    lightComp->SetColor(glm::vec3(0.5f, 1.0f, 0.1f));
+    light->AddComponent(lightComp);
+    light->SetPosition(glm::vec3(0.0f, 5.0f, 0.0f));
+
     CEngine::Engine::GetInstance()
         .SetScene(m_scene);
     return true;
