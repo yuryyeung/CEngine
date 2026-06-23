@@ -3,8 +3,8 @@
 #include "graphics/GraphicsAPI.h"
 #include "Engine.h"
 
-#define CGLTF_IMPLEMENTATION
-#include <cgltf.h>
+// #define CGLTF_IMPLEMENTATION
+// #include <cgltf.h>
 
 namespace CEngine
 {
@@ -76,7 +76,7 @@ namespace CEngine
             glDrawArrays(GL_TRIANGLES, 0, m_vertexCount);
         }
     }
-
+    /*
     std::shared_ptr<Mesh> Mesh::Load(const std::string &path)
     {
         auto contents = Engine::GetInstance().GetFileSystem().LoadAssetFileText(path);
@@ -245,6 +245,7 @@ namespace CEngine
         cgltf_free(data);
         return result;
     }
+    */
 
     std::shared_ptr<Mesh> Mesh::CreateCube()
     {

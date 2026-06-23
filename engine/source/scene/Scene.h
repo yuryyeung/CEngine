@@ -26,6 +26,7 @@ namespace CEngine
                 auto obj = new T();
                 obj->SetName(name);
                 SetParent(obj, parent);
+                obj->m_scene = this;
                 return obj;
             }
 

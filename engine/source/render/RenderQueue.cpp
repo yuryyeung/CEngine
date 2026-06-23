@@ -1,6 +1,6 @@
 #include "render/RenderQueue.h"
-#include "render/Mesh.h";
-#include "render/Material.h";
+#include "render/Mesh.h"
+#include "render/Material.h"
 #include "graphics/GraphicsAPI.h"
 #include "graphics/ShaderProgram.h"
 
