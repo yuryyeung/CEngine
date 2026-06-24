@@ -141,7 +141,7 @@ namespace CEngine
     {
         if (m_parent)
         {
-            return m_parent->GetLocalTransform() * GetLocalTransform();
+            return m_parent->GetWorldTransform() * GetLocalTransform();
         }
         else
         {
