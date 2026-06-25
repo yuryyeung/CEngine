@@ -2,6 +2,7 @@
 #include <GL/glew.h> 
 #include <string>
 #include <memory>
+#include <unordered_map>
 
 namespace CEngine
 {
@@ -19,5 +20,14 @@ namespace CEngine
             int m_height = 0;
             int m_numChannels = 0;
             GLuint m_textureID = 0;
+    };
+
+    class TextureManager
+    {
+        public:
+            std::shared_ptr<Texture> GetOrLoadTexture(const std::string& path);
+
+        private:
+            std::unordered_map<std::string, std::shared_ptr<Texture>> m_textures;
     };
 }

@@ -3,6 +3,7 @@
 #include <chrono>
 #include "input/InputManager.h"
 #include "graphics/GraphicsAPI.h"
+#include "graphics/Texture.h"
 #include "render/RenderQueue.h"
 #include "scene/Scene.h"
 #include "io/FileSystem.h"
@@ -37,6 +38,8 @@ namespace CEngine
 
             FileSystem& GetFileSystem();
 
+            TextureManager &GetTextureManager();
+
             void SetScene(Scene* scene);
             Scene *GetScene();
 
@@ -48,6 +51,7 @@ namespace CEngine
             GraphicsAPI m_graphicsAPI;
             RenderQueue m_renderQueue;
             FileSystem m_fileSystem;
+            TextureManager m_textureManager;
             std::unique_ptr<Scene> m_currentScene;
     };
 }

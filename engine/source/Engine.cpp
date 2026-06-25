@@ -144,6 +144,7 @@ namespace CEngine
                     {
                         cameraData.viewMatrix = cameraComponent->GetViewMatrix();
                         cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix(aspect);
+                        cameraData.position = cameraObject->GetWorldPosition();
                     }
                 }
 
@@ -182,6 +183,11 @@ namespace CEngine
     InputManager &Engine::GetInputManager()
     {
         return m_inputManager;
+    }
+
+    TextureManager &Engine::GetTextureManager()
+    {
+        return m_textureManager;
     }
 
     GraphicsAPI &Engine::GetGraphicsAPI()
