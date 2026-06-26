@@ -31,6 +31,7 @@
 #include "scene/components/CameraComponent.h"
 #include "scene/components/PlayerControllerComponent.h"
 #include "scene/components/LightComponent.h"
+#include "scene/components/AnimationComponent.h"
 
 // IO
 #include "io/FileSystem.h"

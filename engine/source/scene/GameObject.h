@@ -22,6 +22,9 @@ namespace CEngine
             Scene *GetScene();
             bool isAlive() const;
             void MarkForDestory();
+            
+            void SetActive(bool value);
+            bool IsActive() const;
 
             void AddComponent(Component* component);
             template<typename T, typename = typename std::enable_if_t<std::is_base_of_v<Component, T>>>
@@ -38,6 +41,8 @@ namespace CEngine
                 return nullptr;
             }
 
+            GameObject* FindChildByName(const std::string &name);
+
             const glm::vec3& GetPosition() const;
             glm::vec3& GetWorldPosition() const;
             void SetPosition(const glm::vec3 &pos);
@@ -53,6 +58,7 @@ namespace CEngine
 
             static GameObject *LoadGLTF(const std::string &path);
 
+
         protected:
             GameObject() = default;
 
@@ -66,6 +72,7 @@ namespace CEngine
             glm::vec3 m_position = glm::vec3(0.0f);
             glm::quat m_rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
             glm::vec3 m_scale = glm::vec3(1.0f);
+            bool m_isActive = true;
 
             friend class Scene;
     };
