@@ -32,6 +32,12 @@
 #include "scene/components/PlayerControllerComponent.h"
 #include "scene/components/LightComponent.h"
 #include "scene/components/AnimationComponent.h"
+#include "scene/components/PhysicsComponent.h"
 
 // IO
 #include "io/FileSystem.h"
+
+// Physics
+#include "physics/PhysicsManager.h"
+#include "physics/Collider.h"
+#include "physics/RigidBody.h"

@@ -1,5 +1,6 @@
 #pragma once
 #include <GL/glew.h>
+#include <glm/vec3.hpp>
 #include <memory>
 #include <string>
 #include "graphics/VertexLayout.h"
@@ -19,7 +20,8 @@ namespace CEngine
             void Draw();
 
             // static std::shared_ptr<Mesh> Load(const std::string &path);
-            static std::shared_ptr<Mesh> CreateCube();
+            static std::shared_ptr<Mesh> CreateCube(const glm::vec3 &size = glm::vec3(1.0f));
+            static std::shared_ptr<Mesh> CreateBox();
 
         private:
             VertexLayout m_vertexLayout;
