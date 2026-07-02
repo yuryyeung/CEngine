@@ -1,8 +1,8 @@
 #include <iostream>
 #include <CEngine.h>
-#include <GLFW/glfw3.h>
 #include "Game.h"
 #include "TestObject.h"
+#include "Player.h"
 
 bool Game::Init()
 {
@@ -10,15 +10,12 @@ bool Game::Init()
     CEngine::Engine::GetInstance()
         .SetScene(m_scene);
 
-    auto camera = m_scene->CreateObject("Camera");
-    camera->AddComponent(new CEngine::CameraComponent());
-    camera->SetPosition(glm::vec3(0.0f, 1.0f, 7.0f));
-    camera->AddComponent(new CEngine::PlayerControllerComponent());
-
-    m_scene->SetMainCamera(camera);
+    auto player = m_scene->CreateObject<Player>("Player");
+    player->Init();
+    m_scene->SetMainCamera(player);
     m_scene->CreateObject<TestObject>("TestObject");
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 1; i++)
     {
         TestObject* gameobject = m_scene->CreateObject<TestObject>("TestObject_" + i);
     }
@@ -31,25 +28,6 @@ bool Game::Init()
 
     auto suzzanneObj = CEngine::GameObject::LoadGLTF("models/suzanne/Suzanne.gltf");
     suzzanneObj->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
-
-    auto gun = CEngine::GameObject::LoadGLTF("models/sten_gunmachine_carbine/scene.gltf");
-    gun->SetParent(camera);
-    gun->SetPosition(glm::vec3(0.75f, -0.5f, -0.75f));
-    gun->SetScale(glm::vec3(-1.0f, 1.0f, 1.0f));
-
-    if (auto anim = gun->GetComponent<CEngine::AnimationComponent>())
-    {
-        if (auto bullet = gun->FindChildByName("bullet_33"))
-        {
-            // bullet->SetActive(false);
-        }
-
-        if (auto fire = gun->FindChildByName("BOOM_35"))
-        {
-            // fire->SetActive(false);
-        }
-        anim->Play("shoot");
-    }
 
     auto light = m_scene->CreateObject("Light");
     auto lightComp = new CEngine::LightComponent();

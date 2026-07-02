@@ -59,4 +59,14 @@ namespace CEngine
     {
         return m_mousePositionCurrent;
     }
+
+    void InputManager::SetMousePositionChanged(bool changed)
+    {
+        m_mousePositionChanged = changed;
+    }
+
+    bool InputManager::IsMousePositionChanged()
+    {
+        return m_mousePositionChanged;
+    }
 }

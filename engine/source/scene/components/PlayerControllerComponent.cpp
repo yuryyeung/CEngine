@@ -4,33 +4,45 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/vec4.hpp>
+#include "utils/Debug.h"
 
 namespace CEngine
 {
+    void PlayerControllerComponent::Init()
+    {
+        m_kinematicController = std::make_unique<KinematicCharacterController>(0.4f, 1.2f);
+    }
+
     void PlayerControllerComponent::Update(float deltaTime)
     {
         auto &inputManager = Engine::GetInstance().GetInputManager();
         auto rotation = m_owner->GetRotation();
 
-        if (inputManager.IsMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+        // if (inputManager.IsMousePositionChanged())
         {
             const auto &oldPos = inputManager.GetMousePositionOld();
             const auto &current = inputManager.GetMousePositionCurrent();
+
+            Debug::Log(oldPos.x);
+            Debug::Log(current.x);
 
             float deltaX = current.x - oldPos.x;
             float deltaY = current.y - oldPos.y;
 
             // Rotation Around Y Axis
-            float yAngle = -deltaX * m_sensitivity * deltaTime;
-            glm::quat yRot = glm::angleAxis(yAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+            float yDeltaAngle = -deltaX * m_sensitivity * deltaTime;
+            m_yRot += yDeltaAngle;
+            glm::quat yRot = glm::angleAxis(glm::radians(m_yRot), glm::vec3(0.0f, 1.0f, 0.0f));
+            // Debug::Log("DeltaX: " + std::to_string(deltaX) + " , " + std::to_string(m_yRot));
 
             // Rotation Around X Axis
-            float xAngle = -deltaY * m_sensitivity * deltaTime;
-            glm::vec3 right = rotation * glm::vec3(1.0f, 0.0f, 0.0f);
-            glm::quat xRot = glm::angleAxis(xAngle, right);
+            float xDeltaAngle = -deltaY * m_sensitivity * deltaTime;
+            m_xRot += xDeltaAngle;
+            m_xRot = std::clamp(m_xRot, -89.0f, 89.0f);
+            glm::quat xRot = glm::angleAxis(glm::radians(m_xRot), glm::vec3(1.0f, 0.0f, 0.0f));
 
-            glm::quat deltaRot = yRot * xRot;
-            rotation = glm::normalize(deltaRot * rotation);
+            // glm::quat deltaRot = yRot * xRot;
+            rotation = glm::normalize(yRot * xRot);
 
             m_owner->SetRotation(rotation);
         }
@@ -46,27 +58,61 @@ namespace CEngine
         glm::vec3 front = rotation * glm::vec3(0.0f, 0.0f, -1.0f);
         glm::vec3 right = rotation * glm::vec3(1.0f, 0.0f, 0.0f);
 
-        auto position = m_owner->GetPosition();
+        // auto position = m_owner->GetPosition();
 
+        // // Horizotal Movement
+        // if (inputManager.IsKeyPressed(GLFW_KEY_A))
+        // {
+        //     position -= right * m_moveSpeed * deltaTime;
+        // }
+        // if (inputManager.IsKeyPressed(GLFW_KEY_D))
+        // {
+        //     position += right * m_moveSpeed * deltaTime;
+        // }
+
+        // // Vertical Movement
+        // if (inputManager.IsKeyPressed(GLFW_KEY_W))
+        // {
+        //     position += front * m_moveSpeed * deltaTime;
+        // }
+        // if (inputManager.IsKeyPressed(GLFW_KEY_S))
+        // {
+        //     position -= front * m_moveSpeed * deltaTime;
+        // }
+        // m_owner->SetPosition(position);
+
+        glm::vec3 move(0.0f);
         // Horizotal Movement
         if (inputManager.IsKeyPressed(GLFW_KEY_A))
         {
-            position -= right * m_moveSpeed * deltaTime;
+            move -= right;
         }
         if (inputManager.IsKeyPressed(GLFW_KEY_D))
         {
-            position += right * m_moveSpeed * deltaTime;
+            move += right;
         }
 
         // Vertical Movement
         if (inputManager.IsKeyPressed(GLFW_KEY_W))
         {
-            position += front * m_moveSpeed * deltaTime;
+            move += front;
         }
         if (inputManager.IsKeyPressed(GLFW_KEY_S))
         {
-            position -= front * m_moveSpeed * deltaTime;
+            move -= front;
         }
-        m_owner->SetPosition(position);
+
+        // Jump
+        if (inputManager.IsKeyPressed(GLFW_KEY_SPACE))
+        {
+            m_kinematicController->Jump(glm::vec3(0.0f, 5.0f, 0.0f));
+        }
+
+        if (glm::dot(move, move) > 0)
+        {
+            move = glm::normalize(move);
+        }
+        m_kinematicController->Walk(move * m_moveSpeed * deltaTime);
+        m_owner->SetPosition(m_kinematicController->GetPosition());
     }
 }

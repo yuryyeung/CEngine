@@ -2,6 +2,7 @@
 #include "scene/GameObject.h"
 #include "scene/components/LightComponent.h"
 #include <algorithm>
+#include "utils/Debug.h"
 
 namespace CEngine
 {
@@ -11,6 +12,7 @@ namespace CEngine
         {
             if ((*it)->isAlive())
             {
+                // Debug::Log("IT Update:" + (*it).get()->GetName() + " @ Scene");
                 (*it)->Update(deltaTime);
                 ++it;
             }

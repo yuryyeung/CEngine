@@ -16,10 +16,13 @@
 #define CGLTF_IMPLEMENTATION
 #include <cgltf.h>
 
+#include "utils/Debug.h"
+
 namespace CEngine
 {
     void GameObject::Update(float deltaTime)
     {
+        // Debug::Log("Update: " + this->GetName() + " @ GameObject");
         if (!m_isActive)
         {
             return;
@@ -27,6 +30,7 @@ namespace CEngine
         
         for (auto& component : m_components)
         {
+            // Debug::Log(component.get()->m_owner->GetName()  + " || " + std::to_string(component.get()->GetTypeId()));
             component->Update(deltaTime);
         }
 

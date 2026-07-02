@@ -61,8 +61,7 @@ namespace CEngine
 
         protected:
             GameObject() = default;
-
-        private:
+            
             std::string m_name;
             GameObject *m_parent = nullptr;
             Scene *m_scene = nullptr;

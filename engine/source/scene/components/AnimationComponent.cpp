@@ -186,6 +186,11 @@ namespace CEngine
         }
     }
 
+    bool AnimationComponent::IsPlaying() const
+    {
+        return m_isPlaying;
+    }
+
     void AnimationComponent::BuildBinding()
     {
         m_bindings.clear();
