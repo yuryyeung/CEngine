@@ -44,7 +44,7 @@ namespace CEngine
             GameObject* FindChildByName(const std::string &name);
 
             const glm::vec3& GetPosition() const;
-            glm::vec3& GetWorldPosition() const;
+            glm::vec3 GetWorldPosition() const;
             void SetPosition(const glm::vec3 &pos);
 
             const glm::quat& GetRotation() const;

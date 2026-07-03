@@ -1,7 +1,7 @@
 #include "scene/GameObject.h"
 #include "Engine.h"
 #include "graphics/VertexLayout.h"
-#include "scene/Components/MeshComponent.h"
+#include "scene/components/MeshComponent.h"
 #include "scene/components/AnimationComponent.h" 
 #include "render/Mesh.h"
 #include "render/Material.h"
@@ -131,7 +131,7 @@ namespace CEngine
         return m_position;
     }
 
-    glm::vec3& GameObject::GetWorldPosition() const
+    glm::vec3 GameObject::GetWorldPosition() const
     {
         glm::vec4 hom = GetWorldTransform() * glm::vec4(glm::vec3(0.0f), 1.0f);
         return glm::vec3(hom) / hom.w;

@@ -105,9 +105,9 @@ target_link_libraries(${PROJECT_NAME}
     glfw 
     glew_s
 	glm
-	LinearMath
-	BulletCollision
 	BulletDynamics
+    BulletCollision
+    LinearMath
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
