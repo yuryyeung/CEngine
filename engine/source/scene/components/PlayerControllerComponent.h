@@ -13,11 +13,13 @@ namespace CEngine
             void Update(float deltaTime) override;
 
         private:
-            float m_sensitivity = 30.0f;
-            float m_moveSpeed = 10.0f;
+            float m_sensitivity = 3.0f;
+            float m_moveSpeed = 1.0f;
 
             float m_xRot = 0.0f;
             float m_yRot = 0.0f;
             std::unique_ptr<KinematicCharacterController> m_kinematicController;
+
+            glm::quat CreateQuaternion(glm::vec3 direction, float angle);
     };
 }

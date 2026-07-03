@@ -1,4 +1,5 @@
 #include "input/InputManager.h"
+#include "utils/Debug.h"
 
 namespace CEngine
 {
@@ -52,6 +53,7 @@ namespace CEngine
 
     void InputManager::SetMousePositionCurrent(const glm::vec2 &position)
     {
+        Debug::Log(std::to_string(position.x) + " " + std::to_string(position.y));
         m_mousePositionCurrent = position;
     }
 
