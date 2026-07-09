@@ -7,6 +7,7 @@
 #include "utils/Debug.h"
 #include <cmath>
 #include <numbers>
+#include <corecrt_math_defines.h>
 
 namespace CEngine
 {
