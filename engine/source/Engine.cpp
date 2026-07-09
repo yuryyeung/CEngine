@@ -85,6 +85,11 @@ namespace CEngine
         glfwSetCursorPosCallback(m_window, cursorPositionCallback);
         glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+        if (glfwRawMouseMotionSupported())
+        {
+            glfwSetInputMode(m_window,GLFW_RAW_MOUSE_MOTION,GLFW_TRUE);
+        }
+
         // Show Window
         glfwMakeContextCurrent(m_window);
 
