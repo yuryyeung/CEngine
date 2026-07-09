@@ -43,6 +43,7 @@ namespace CEngine
 
     void InputManager::SetMousePositionOld(const glm::vec2 &position)
     {
+        Debug::Log("Update Previous [" + std::to_string(position.x) + ", " + std::to_string(position.y) + "]");
         m_mousePositionOld = position;
     }
 
@@ -53,8 +54,37 @@ namespace CEngine
 
     void InputManager::SetMousePositionCurrent(const glm::vec2 &position)
     {
-        Debug::Log(std::to_string(position.x) + " " + std::to_string(position.y));
+        glm::vec2 changes = position - this->GetMousePositionOld();
+        Debug::Log("Update Current [" + std::to_string(position.x) + ", " + std::to_string(position.y) + "]");
         m_mousePositionCurrent = position;
+    }
+
+    void InputManager::MouseTracing(double xpos, double ypos)
+    {
+        glm::vec2 currentPos(static_cast<float>(xpos), static_cast<float>(ypos));
+        // Debug::Log(std::to_string(xpos) + " " + std::to_string(ypos));
+        if (m_isStarted)
+        {
+            auto previousPos = GetMousePositionCurrent();
+            if (GetMousePositionCurrent() != currentPos)
+            {
+                SetMousePositionChanged(true);
+            }
+            SetMousePositionOld(GetMousePositionCurrent());
+        }
+        else if (GetMousePositionCurrent() != glm::vec2(0.0f))
+        {
+            m_isStarted = true;
+        }
+        SetMousePositionCurrent(currentPos);
+
+        glm::vec2 old = GetMousePositionOld();
+        // Debug::Log("old:[x: " + std::to_string(old.x) + ",y: " + std::to_string(old.y) + "] | current[x: " + std::to_string(currentPos.x) + ",y: " + std::to_string(currentPos.y) + "]");
+    }
+
+    bool InputManager::GetIsStarted()
+    {
+        return m_isStarted;
     }
 
     const glm::vec2 &InputManager::GetMousePositionCurrent() const

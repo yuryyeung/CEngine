@@ -13,7 +13,7 @@ namespace CEngine
             void Update(float deltaTime) override;
 
         private:
-            float m_sensitivity = 3.0f;
+            float m_sensitivity = 0.03f;
             float m_moveSpeed = 1.0f;
 
             float m_xRot = 0.0f;
