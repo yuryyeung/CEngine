@@ -21,13 +21,17 @@ namespace CEngine
         auto &inputManager = Engine::GetInstance().GetInputManager();
         auto rotation = m_owner->GetRotation();
 
-        if (inputManager.IsMousePositionChanged())
+        if (!inputManager.GetIsStarted()) return;
+
+        // if (inputManager.IsMousePositionChanged())
         {
             const auto &oldPos = inputManager.GetMousePositionOld();
             const auto &current = inputManager.GetMousePositionCurrent();
 
             float deltaX = current.x - oldPos.x;
             float deltaY = current.y - oldPos.y;
+
+            Debug::Log(std::to_string(deltaX) + " " + std::to_string(deltaY) + " " + std::to_string(deltaTime));
 
             // // Rotation Around Y Axis
             // float yDeltaAngle = -deltaX * m_sensitivity ;
@@ -42,8 +46,10 @@ namespace CEngine
 
             // rotation = glm::normalize(yRot * xRot);
 
-            m_yRot -= deltaX * m_sensitivity * deltaTime; // (Yaw)
-            m_xRot -= deltaY * m_sensitivity * deltaTime; // (Pitch)
+            m_yRot -= deltaX * m_sensitivity; // (Yaw)
+            m_xRot -= deltaY * m_sensitivity; // (Pitch)
+
+            // Debug::Log(std::to_string(m_yRot) + " " + std::to_string(m_xRot));
 
             double pi = M_PI;
 
