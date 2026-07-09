@@ -41,30 +41,13 @@ namespace CEngine
         }
     }
 
-    double lastx = 0;
-    double lasty = 0;
     void cursorPositionCallback(GLFWwindow *window, double xpos, double ypos)
     {
-        double dx = xpos - lastx;
-        double dy = ypos - lasty;
-
-        auto now = std::chrono::system_clock::now();
-        std::time_t c_time = std::chrono::system_clock::to_time_t(now);
-        std::tm tm_time = *std::localtime(&c_time);
-
-        auto duration = now.time_since_epoch();
-        auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() % 1000;
-
         auto &inputManager = CEngine::Engine::GetInstance().GetInputManager();
         inputManager.SetMousePositionOld(inputManager.GetMousePositionCurrent());
         glm::vec2 currentPos(static_cast<float>(xpos), static_cast<float>(ypos));
         inputManager.SetMousePositionCurrent(currentPos);
         inputManager.SetMousePositionChanged(true);
-
-        Debug::Log("[dx: " + std::to_string(dx) + ", dy: " + std::to_string(dy) + "] | [xpos: " + std::to_string(xpos) + ", ypos: " + std::to_string(ypos) + "] - Time: " + std::to_string(millis));
-
-        lastx = xpos;
-        lasty = ypos;
     }
 
     Engine &Engine::GetInstance()
@@ -104,7 +87,7 @@ namespace CEngine
 
         glfwSetKeyCallback(m_window, keyCallback);
         glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
-        // glfwSetCursorPosCallback(m_window, cursorPositionCallback);
+        // glfwSetCursorPosCallback(m_window, cursorPositionCallback); // Obsolete
         glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         if (glfwRawMouseMotionSupported())

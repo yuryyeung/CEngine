@@ -43,7 +43,6 @@ namespace CEngine
 
     void InputManager::SetMousePositionOld(const glm::vec2 &position)
     {
-        Debug::Log("Update Previous [" + std::to_string(position.x) + ", " + std::to_string(position.y) + "]");
         m_mousePositionOld = position;
     }
 
@@ -55,7 +54,6 @@ namespace CEngine
     void InputManager::SetMousePositionCurrent(const glm::vec2 &position)
     {
         glm::vec2 changes = position - this->GetMousePositionOld();
-        Debug::Log("Update Current [" + std::to_string(position.x) + ", " + std::to_string(position.y) + "]");
         m_mousePositionCurrent = position;
     }
 
@@ -77,9 +75,6 @@ namespace CEngine
             m_isStarted = true;
         }
         SetMousePositionCurrent(currentPos);
-
-        glm::vec2 old = GetMousePositionOld();
-        // Debug::Log("old:[x: " + std::to_string(old.x) + ",y: " + std::to_string(old.y) + "] | current[x: " + std::to_string(currentPos.x) + ",y: " + std::to_string(currentPos.y) + "]");
     }
 
     bool InputManager::GetIsStarted()
