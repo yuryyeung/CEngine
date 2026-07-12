@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <nlohmann/json.hpp>
 #include "GameObject.h"
 #include "Common.h"
 
@@ -13,6 +14,7 @@ namespace CEngine
             std::vector<std::unique_ptr<GameObject>> m_objects;
             GameObject *m_mainCamera = nullptr;
             void CollectLightRecursive(GameObject* obj, std::vector<LightData>& out);
+            void LoadObject(const nlohmann::json &jsonObject, GameObject *parent);
 
         public:
             void Update(float deltaTime);
@@ -36,5 +38,7 @@ namespace CEngine
             GameObject *GetMainCamera();
 
             std::vector<LightData> CollectLights();
+
+            static std::shared_ptr<Scene> Load(const std::string &path);
     };
 }

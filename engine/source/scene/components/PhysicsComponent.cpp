@@ -17,7 +17,7 @@ namespace CEngine
         }
 
         const auto pos = m_owner->GetWorldPosition();
-        const auto rot = m_owner->GetRotation();
+        const auto rot = m_owner->GetWorldRotation();
 
         m_rigidBody->SetPosition(pos);
         m_rigidBody->SetRotation(rot);
@@ -27,10 +27,15 @@ namespace CEngine
 
     void PhysicsComponent::Update(float deltaTime)
     {
+        if (!m_rigidBody)
+        {
+            return;
+        }
+
         if (m_rigidBody->GetType() == BodyType::Dynamic)
         {
-            m_owner->SetPosition(m_rigidBody->GetPosition());
-            m_owner->SetRotation(m_rigidBody->GetRotation());
+            m_owner->SetWorldPosition(m_rigidBody->GetPosition());
+            m_owner->SetWorldRotation(m_rigidBody->GetRotation());
         }
     }
 }

@@ -1,5 +1,6 @@
 #include "scene/Scene.h"
 #include "scene/GameObject.h"
+#include "Engine.h"
 #include "scene/components/LightComponent.h"
 #include <algorithm>
 #include "utils/Debug.h"
@@ -201,6 +202,89 @@ namespace CEngine
         for (auto& child : obj->m_children)
         {
             CollectLightRecursive(child.get(), out);
+        }
+    }
+
+    std::shared_ptr<Scene> Scene::Load(const std::string &path)
+    {
+        const std::string contents = Engine::GetInstance().GetFileSystem().LoadAssetFileText(path);
+        if (contents.empty())
+        {
+            return nullptr;
+        }
+
+        auto json = nlohmann::json::parse(contents);
+        if (json.empty())
+        {
+            return nullptr;
+        }
+
+        auto result = std::make_shared<Scene>();
+
+        const std::string sceneName = json.value("name", "noname");
+        if (json.contains("object") && json["object"].is_array())
+        {
+            const auto &objects = json["object"];
+            for (const auto& obj : objects)
+            {
+                result->LoadObject(obj, nullptr);
+            }
+        }
+
+        return result;
+    }
+
+    void Scene::LoadObject(const nlohmann::json &jsonObject, GameObject *parent)
+    {
+        const std::string name = jsonObject.value("name", "Object");
+        GameObject* gameObject = nullptr;
+
+        if (jsonObject.contains("type"))
+        {
+            const std::string type = jsonObject.value("type", "");
+        }
+        else
+        {
+            gameObject = CreateObject("name", parent);
+        }
+
+        if (!gameObject)
+        {
+            return;
+        }
+
+        // Read Transform
+        if (jsonObject.contains("position"))
+        {
+            auto posObj = jsonObject["position"];
+            glm::vec3 pos = glm::vec3(
+                posObj.value("x", 0.0f), posObj.value("y", 0.0f), posObj.value("z", 0.0f));
+            gameObject->SetPosition(pos);
+        }
+
+        if (jsonObject.contains("rotation"))
+        {
+            auto rotObj = jsonObject["rotation"];
+            glm::quat rot = glm::quat(
+                rotObj.value("x", 0.0f), rotObj.value("y", 0.0f), rotObj.value("z", 0.0f), rotObj.value("w", 1.0f));
+            gameObject->SetRotation(rot);
+        }
+
+        if (jsonObject.contains("scale"))
+        {
+            auto scaleObj = jsonObject["scale"];
+            glm::vec3 scale = glm::vec3(
+                scaleObj.value("x", 0.0f), scaleObj.value("y", 0.0f), scaleObj.value("z", 0.0f));
+            gameObject->SetScale(scale);
+        }
+
+        if (jsonObject.contains("components") && jsonObject["components"].is_array())
+        {
+            const auto &components = jsonObject["components"];
+            for (const auto& comp : components)
+            {
+                const std::string type = comp.value("type", "");
+            }
         }
     }
 }

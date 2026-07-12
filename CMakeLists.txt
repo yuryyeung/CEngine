@@ -25,6 +25,8 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_FILES} "source/Game.h")
 add_compile_definitions(GLEW_NO_GLU)
 add_subdirectory(engine "${CMAKE_CURRENT_BINARY_DIR}/engine_build")
 include_directories(engine/source)
+include_directories(engine/thirdparty/json)
+
 
 # Link engine library
 target_link_libraries(${PROJECT_NAME} 

@@ -29,6 +29,29 @@ namespace CEngine
             static size_t nextId;
     };
 
+    class ComponentCreatorBase
+    {
+        public:
+            virtual ~ComponentCreatorBase() = default;
+            virtual Component *CreateComponent() = 0;
+    };
+
+    template <typename T>
+    class ComponentCreator : public ComponentCreatorBase
+    {
+        public:
+            Component* CreateComponent() override
+            {
+                return new T();
+            }
+    };
+
+    class ComponentFactory
+    {
+        public:
+            static ComponentFactory& GetInstance();
+    }
+
 #define COMPONENT(ComponentClass)                                                \
 public:                                                                          \
     static size_t TypeId() { return Component::StaticTypeId<ComponentClass>(); } \
