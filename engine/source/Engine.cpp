@@ -63,6 +63,9 @@ namespace CEngine
             return false;
         }
 
+        Scene::RegisterTypes();
+        m_application->RegisterTypes();
+
         if (!glfwInit())
         {
             Debug::LogError("GLFW NOT BEEN INITIALIZED");

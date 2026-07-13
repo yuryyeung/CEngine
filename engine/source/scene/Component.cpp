@@ -1,5 +1,6 @@
 #include "scene/Component.h"
 #include <cstddef>
+#include <nlohmann/json.hpp>
 
 namespace CEngine
 {
@@ -13,5 +14,16 @@ namespace CEngine
     GameObject *Component::GetOwner()
     {
         return m_owner;
+    }
+
+    ComponentFactory& ComponentFactory::GetInstance()
+    {
+        static ComponentFactory instance;
+        return instance;
+    }
+
+    void Component::LoadProperties(const nlohmann::json& json)
+    {
+
     }
 }

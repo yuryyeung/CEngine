@@ -17,6 +17,7 @@ namespace CEngine
             void LoadObject(const nlohmann::json &jsonObject, GameObject *parent);
 
         public:
+            static void RegisterTypes();
             void Update(float deltaTime);
             void Clear();
 

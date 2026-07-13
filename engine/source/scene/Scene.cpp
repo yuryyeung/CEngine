@@ -1,12 +1,27 @@
+#include "Engine.h"
+#include "utils/Debug.h"
 #include "scene/Scene.h"
 #include "scene/GameObject.h"
-#include "Engine.h"
+#include "scene/components/AnimationComponent.h"
+#include "scene/components/CameraComponent.h"
 #include "scene/components/LightComponent.h"
+#include "scene/components/MeshComponent.h"
+#include "scene/components/PhysicsComponent.h"
+#include "scene/components/PlayerControllerComponent.h"
 #include <algorithm>
-#include "utils/Debug.h"
 
 namespace CEngine
 {
+    void Scene::RegisterTypes()
+    {
+        AnimationComponent::Register();
+        CameraComponent::Register();
+        LightComponent::Register();
+        MeshComponent::Register();
+        PhysicsComponent::Register();
+        PlayerControllerComponent::Register();
+    }
+
     void Scene::Update(float deltaTime)
     {
         for (auto it = m_objects.begin(); it != m_objects.end();)
@@ -284,6 +299,12 @@ namespace CEngine
             for (const auto& comp : components)
             {
                 const std::string type = comp.value("type", "");
+                Component* component = ComponentFactory::GetInstance().CreateComponent(type);
+                if (component)
+                {
+                    component->LoadProperties(comp);
+                    gameObject->AddComponent(component);
+                }
             }
         }
     }

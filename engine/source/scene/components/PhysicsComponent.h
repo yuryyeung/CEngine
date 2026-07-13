@@ -15,6 +15,8 @@ namespace CEngine
             void Init() override;
             void Update(float deltaTime) override;
 
+            void SetRigidBody(std::shared_ptr<RigidBody> &body);
+
         private:
             std::shared_ptr<RigidBody> m_rigidBody;
     };

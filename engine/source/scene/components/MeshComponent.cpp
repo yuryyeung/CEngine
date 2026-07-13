@@ -27,4 +27,19 @@ namespace CEngine
         auto &renderQueue = Engine::GetInstance().GetRenderQueue();
         renderQueue.Submit(command);
     }
+
+    void MeshComponent::LoadProperites()
+    {
+
+    }
+
+    void MeshComponent::SetMaterial(const std::shared_ptr<Material> material)
+    {
+        m_material = material;
+    }
+
+    void MeshComponent::SetMesh(const std::shared_ptr<Mesh> mesh)
+    {
+        m_mesh = mesh;
+    }
 }

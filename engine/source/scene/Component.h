@@ -1,5 +1,9 @@
 #pragma once
 #include <cstddef>
+#include <string>
+#include <memory>
+#include <unordered_map>
+#include <nlohmann/json.hpp>
 
 namespace CEngine
 {
@@ -8,6 +12,7 @@ namespace CEngine
     {
         public:
             virtual ~Component() = default;
+            virtual void LoadProperties(const nlohmann::json& json);
             virtual void Init();
             virtual void Update(float deltaTime) = 0;
             virtual size_t GetTypeId() const = 0;
@@ -50,10 +55,34 @@ namespace CEngine
     {
         public:
             static ComponentFactory& GetInstance();
-    }
+
+            template<typename T>
+            void RegisterComponent(const std::string& name)
+            {
+                m_creators.emplace(name, std::make_unique<ComponentCreator<T>>());
+            }
+
+            Component* CreateComponent(const std::string& name)
+            {
+                auto it = m_creators.find(name);
+                if (it != m_creators.end())
+                {
+                    return it->second->CreateComponent();
+                }
+                return nullptr;
+            }
+
+        private:
+            std::unordered_map<std::string, std::unique_ptr<ComponentCreatorBase>> m_creators;
+    };
 
 #define COMPONENT(ComponentClass)                                                \
 public:                                                                          \
-    static size_t TypeId() { return Component::StaticTypeId<ComponentClass>(); } \
-    size_t GetTypeId() const override { return TypeId(); }                       
+    static size_t TypeId() { return CEngine::Component::StaticTypeId<ComponentClass>(); } \
+    size_t GetTypeId() const override { return TypeId(); }   
+    
+    static void Register() 
+    {
+        CEngine::ComponentFactory::GetInstance().RegisterComponent<ComponentClass>(std::string(#ComponentClass));
+    }
 }

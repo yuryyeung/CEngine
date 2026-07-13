@@ -38,4 +38,9 @@ namespace CEngine
             m_owner->SetWorldRotation(m_rigidBody->GetRotation());
         }
     }
+
+    void PhysicsComponent::SetRigidBody(std::shared_ptr<RigidBody> &body)
+    {
+        m_rigidBody = body;
+    }
 }

@@ -2,6 +2,11 @@
 
 namespace CEngine
 {
+    void Application::RegisterTypes()
+    {
+
+    }
+
     void Application::SetNeedToBeClosed(bool value)
     {
         m_needsToBeClosed = value;
