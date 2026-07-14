@@ -18,6 +18,27 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "MainPlayer",
+            "type": "Player",
+            "position": { "x": 0, "y": 2, "z": 7 },
+            "components": [
+                { "type": "CameraComponent" },
+                { "type": "PlayerControllerComponent" }
+            ],
+            "children": [
+                {
+                    "name": "Gun",
+                    "type": "gltf",
+                    "path": "models/sten_gunmachine_carbine/scene.gltf",
+                    "position": { "x": 0.75, "y": -0.5, "z": -0.75 },
+                    "scale": { "x": -1, "y": 1, "z": 1 },
+                    "components": [
+                        { "type": "AnimationComponent" },
+                    ],
+                }
+            ]
         }
     ]
 }

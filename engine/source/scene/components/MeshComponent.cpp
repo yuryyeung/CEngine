@@ -28,9 +28,33 @@ namespace CEngine
         renderQueue.Submit(command);
     }
 
-    void MeshComponent::LoadProperites()
+    void MeshComponent::LoadProperites(const nlohmann::json& json)
     {
+        if (json.contains("material"))
+        {
+            const std::string matPath = json.value("material", "");
+            auto material = Material::Load(matPath);
+            if (material)
+            {
+                SetMaterial(material);
+            }
+        }
 
+        if (json.contains("mesh"))
+        {
+            const auto& meshObj = json["mesh"];
+            const std::string type = meshObj.value("type", "box");
+            if (type == "box")
+            {
+                glm::vec3 extents(
+                    meshObj.value("x", 1.0f),
+                    meshObj.value("y", 1.0f),
+                    meshObj.value("z", 1.0f)
+                );
+                auto mesh = Mesh::CreateCube(extents);
+                SetMesh(mesh);
+            }
+        }
     }
 
     void MeshComponent::SetMaterial(const std::shared_ptr<Material> material)

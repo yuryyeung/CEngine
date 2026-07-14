@@ -6,6 +6,7 @@
 #include <glm/mat4x4.hpp>
 #include "scene/Component.h"
 #include <glm/gtc/quaternion.hpp>
+#include <nlohmann/json.hpp>
 
 namespace CEngine
 {
@@ -14,6 +15,8 @@ namespace CEngine
     {
         public:
             virtual ~GameObject() = default;
+            virtual void Init();
+            virtual void LoadProperties(const nlohmann::json& json);
             virtual void Update(float deltaTime);
             const std::string &GetName() const;
             void SetName(const std::string &name);
@@ -78,4 +81,13 @@ namespace CEngine
 
             friend class Scene;
     };
+
+    class ObjectCreatorBase
+    {
+        public:
+            virtual ~ObjectCreatorBase() = default;
+            virtual GameObject* CreateGameObject() = 0;
+    }
+
+    
 }

@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <nlohmann/json.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
@@ -20,6 +21,16 @@
 
 namespace CEngine
 {
+    void GameObject::Init()
+    {
+
+    }
+
+    void GameObject::LoadProperties(const nlohmann::json& json)
+    {
+        
+    }
+
     void GameObject::Update(float deltaTime)
     {
         // Debug::Log("Update: " + this->GetName() + " @ GameObject");

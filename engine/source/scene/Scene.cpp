@@ -257,6 +257,15 @@ namespace CEngine
         if (jsonObject.contains("type"))
         {
             const std::string type = jsonObject.value("type", "");
+            if (type == "gltf")
+            {
+                // GLTF Loading
+
+            }
+            else
+            {
+                
+            }
         }
         else
         {
@@ -293,6 +302,8 @@ namespace CEngine
             gameObject->SetScale(scale);
         }
 
+        gameObject->LoadProperties(jsonObject);
+
         if (jsonObject.contains("components") && jsonObject["components"].is_array())
         {
             const auto &components = jsonObject["components"];
@@ -307,5 +318,16 @@ namespace CEngine
                 }
             }
         }
+
+        if (jsonObject.contains("children") && jsonObject["children"].is_array())
+        {
+            const auto &children = jsonObject["children"];
+            for (const auto& child : children)
+            {
+                LoadObject(child, gameObject);
+            }
+        }
+
+        gameObject->Init();
     }
 }

@@ -76,9 +76,9 @@ namespace CEngine
             std::unordered_map<std::string, std::unique_ptr<ComponentCreatorBase>> m_creators;
     };
 
-#define COMPONENT(ComponentClass)                                                \
-public:                                                                          \
-    static size_t TypeId() { return CEngine::Component::StaticTypeId<ComponentClass>(); } \
+#define COMPONENT(ComponentClass)                                                           \
+public:                                                                                     \
+    static size_t TypeId() { return CEngine::Component::StaticTypeId<ComponentClass>(); }   \
     size_t GetTypeId() const override { return TypeId(); }   
     
     static void Register() 
