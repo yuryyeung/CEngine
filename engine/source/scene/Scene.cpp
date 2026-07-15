@@ -265,7 +265,13 @@ namespace CEngine
             if (type == "gltf")
             {
                 // GLTF Loading
-
+                std::string path = jsonObject.value("path", "");
+                gameObject = GameObject::LoadGLTF(path);
+                if(gameObject)
+                {
+                    gameObject->SetParent(parent);
+                    gameObject->SetName(name);
+                }
             }
             else
             {
