@@ -641,4 +641,21 @@ namespace CEngine
         cgltf_free(data);
         return resultObject;
     }
+
+    GameObjectFactory& GameObjectFactory::GetInstance()
+    {
+        static GameObjectFactory instance;
+        return instance;
+    }
+    
+    GameObject* GameObjectFactory::CreateGameObject(const std::string& typeName)
+    {
+        auto it = m_creators.find(typeName);
+        if (it == m_creators.end())
+        {
+            return nullptr;
+        }
+
+        return it->second->CreateGameObject();
+    }
 }

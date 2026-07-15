@@ -86,8 +86,31 @@ namespace CEngine
     {
         public:
             virtual ~ObjectCreatorBase() = default;
-            virtual GameObject* CreateGameObject() = 0;
-    }
+            virtual GameObject* CreateGameObject(const std::string& typeName) = 0;
+    };
 
-    
+    template <typename T>
+    class ObjectCreator : public ObjectCreatorBase
+    {
+        public:
+            virtual GameObject* CreateGameObject override()
+            {
+                return new ();
+            }
+    };
+
+    class GameObjectFactory
+    {
+        public:
+            static GameObjectFactory& GetInstance();
+            template <typename T>
+            void RegisterObject(const std::string& name)
+            {
+                m_creators.emplace(name, std::make_unique<ObjectCreator<T>>());
+            }
+    };
+
+#define GAMEOBJECT(ObjectClass) \
+    public:                     \
+        static void Register() { CEngine::GameObjectFactory::GetInstance().RegisterObject<ObjectClass>(std::string(#ObjectClass)); }
 }

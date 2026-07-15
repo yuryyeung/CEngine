@@ -53,6 +53,11 @@ namespace CEngine
         return gameObject;
     }
 
+    GameObject *Scene::CreateObject(const std::string &type, const std::string &name, GameObject *parent)
+    {
+        auto obj = GameObjectFactory::GetInstance().CreateGameObject(type);
+    }
+
     bool Scene::SetParent(GameObject *obj, GameObject *parent)
     {
         bool result = false;

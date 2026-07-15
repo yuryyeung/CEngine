@@ -62,15 +62,7 @@ namespace CEngine
                 m_creators.emplace(name, std::make_unique<ComponentCreator<T>>());
             }
 
-            Component* CreateComponent(const std::string& name)
-            {
-                auto it = m_creators.find(name);
-                if (it != m_creators.end())
-                {
-                    return it->second->CreateComponent();
-                }
-                return nullptr;
-            }
+            Component* CreateComponent(const std::string& name);
 
         private:
             std::unordered_map<std::string, std::unique_ptr<ComponentCreatorBase>> m_creators;
@@ -79,10 +71,6 @@ namespace CEngine
 #define COMPONENT(ComponentClass)                                                           \
 public:                                                                                     \
     static size_t TypeId() { return CEngine::Component::StaticTypeId<ComponentClass>(); }   \
-    size_t GetTypeId() const override { return TypeId(); }   
-    
-    static void Register() 
-    {
-        CEngine::ComponentFactory::GetInstance().RegisterComponent<ComponentClass>(std::string(#ComponentClass));
-    }
+    size_t GetTypeId() const override { return TypeId(); }                                  \
+    static void Register() {CEngine::ComponentFactory::GetInstance().RegisterComponent<ComponentClass>(std::string(#ComponentClass));}
 }

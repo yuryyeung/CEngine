@@ -4,6 +4,11 @@
 #include "TestObject.h"
 #include "Player.h"
 
+void Game::RegisterTypes()
+{
+    Player::Register();
+}
+
 bool Game::Init()
 {
     m_scene = new CEngine::Scene();

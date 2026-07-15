@@ -3,6 +3,7 @@
 
 class Player : public CEngine::GameObject
 {
+    GAMEOBJECT(Player)
     public:
         void Init();
         void Update(float deltaTime) override;
